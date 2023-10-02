@@ -3,21 +3,20 @@
 #include <cmath>
 #include <sstream>
 #include <cmath>
+#include <cstdint>
 
 class Array {
 public:
-    using size_t = unsigned int;
-    using value_t = float;
-    using Iterator = value_t*;
+    using Iterator = double*;
 
-    Array(size_t size) : m_size(size) {
+    Array(uint32_t size) : m_size(size) {
         if (size > maxsize()) {
             throw std::range_error("invalid array size");
         }
-        m_data = new value_t[size];
+        m_data = new double[size];
     }
 
-    Array(size_t size, value_t default_value) : Array(size) {
+    Array(uint32_t size, double default_value) : Array(size) {
         for (auto& element : *this) {
             element = default_value;
         }
@@ -27,7 +26,7 @@ public:
         if (begin >= end) {
             throw invalid_iterators("invalid iterators");
         }
-        size_t index = 0;
+        uint32_t index = 0;
         for (Iterator it = begin; it != end; ++it) {
             m_data[index++] = *it;
         }
@@ -42,14 +41,14 @@ public:
             if (size() != array.size()) {
                 throw different_sizes("arrays have different sizes");
             }
-            for (size_t n = 0; n < size(); ++n) {
+            for (uint32_t n = 0; n < size(); ++n) {
                 m_data[n] = array[n];
             }
         }
         return *this;
     }
 
-    value_t& operator[](size_t index) {
+    double& operator[](uint32_t index) {
         if (index < m_size) {
             return m_data[index];
         }
@@ -58,7 +57,7 @@ public:
         }
     }
 
-    const value_t& operator[](size_t index) const {
+    const double& operator[](uint32_t index) const {
         if (index < m_size) {
             return m_data[index];
         }
@@ -68,8 +67,8 @@ public:
     }
 
 
-    size_t size() const { return m_size; }
-    static size_t maxsize() { return MAX_SIZE; }
+    uint32_t size() const { return m_size; }
+    static uint32_t maxsize() { return MAX_SIZE; }
 
     Iterator       begin() { return m_data; }
     Iterator       end() { return m_data + m_size; }
@@ -114,9 +113,9 @@ public:
     };
 
 private:
-    const static size_t MAX_SIZE = 10000;
-    const size_t m_size;
-    value_t* m_data;
+    const static uint32_t MAX_SIZE = 10000;
+    const uint32_t m_size;
+    double* m_data;
 };
 
 class Integral {
